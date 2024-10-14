@@ -1,0 +1,186 @@
+{% extends 'home.html'%}
+
+{%block derogation %}
+<div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+    <form action="POST">
+        {% csrf_token %}
+
+        <!--first a title-->
+        <br>
+        <h5 class="card-title text-center mb-5 text-danger fs-5">إقليم الإختصاص</h5>
+
+        <select class="form-floating mb-3 form-control" id="wilaya" name="wilaya">
+            <option value="" selected disabled>الولاية</option>
+            {% for city in cities %}
+                <option value="{{ city.code}}" >{{city.city}}</option>
+            {%endfor%}
+        </select>
+
+        <h5 class="card-title text-center mb-5 text-danger fs-5">معلومات المؤسسة</h5>
+        
+        <input type="text" class="form-floating mb-3 form-control" id="entpname" placeholder="المؤسسة">
+        
+        <input type="email" class="form-floating mb-3 form-control" id="entpemail" placeholder="البريد الإلكتروني">
+        
+        <input type="text" class="form-floating mb-3 form-control" id="entpadrs" placeholder="عنوان المؤسسة">
+
+        <input type="tel" class="form-floating mb-3 form-control" id="entptel" placeholder="رقم الهاتف"ِِِ dir="rtl">
+        
+        
+
+        <select class="form-floating mb-3 form-control" id="sect_jur" name="sect_jur">
+            <option value="" selected disabled>القطاع القانوني</option>
+            <option value="agr">خاص وطني</option>
+            <option value="ind">عام وطني</option>
+            <option value="btp">مختلط</option>
+        </select>
+
+        <select class="form-floating mb-3 form-control" id="sect_act" name="sect_act" onchange="updateSecondList()" placeholder="قطاع النشاط"ِِِ>
+            <option value="" selected disabled>قطاع النشاط</option>
+            <option value="agr">فلاحة والصيد البحري</option>
+            <option value="ind">صناعة</option>
+            <option value="btp">بناء وأشغال عمومية والري</option>
+            <option value="ser">خدمات</option>
+        </select>
+
+        <select class="form-floating mb-3 form-control" id="nat_act" name="nat_act">
+            <option value="" selected disabled>طبيعة النشاط</option>
+        </select>
+
+        <input type="number" class="form-floating mb-3 form-control" id="entpnum_emp" placeholder="عدد العمال الإجمالي">
+        <input type="number" class="form-floating mb-3 form-control" id="entpnum_emp_femme" placeholder="عدد النساء العاملات">
+        <input type="number" class="form-floating mb-3 form-control" id="entpnum_emp_jour" placeholder="عدد عمال نهارا">
+        <input type="number" class="form-floating mb-3 form-control" id="entpnum_emp_nuit" placeholder="عدد عمال المناوبة الليلية">
+        <input type="number" class="form-floating mb-3 form-control" id="floatingInput" placeholder="عدد ساعات العمل">
+
+        <select class="form-floating mb-3 form-control" id="heuertrv" name="heuertrv" placeholder="ساعات العمل المطبقة"ِِِ>
+            <option value="" selected disabled>ساعات العمل المطبقة</option>
+            <option value="fix">ساعات عمل ثابتة</option>
+            <option value="t28">بالتناوب (2/8)</option>
+            <option value="t38w">بالتناوب (3/8) مع إستراحة نهاية الأسبوع</option>
+            <option value="t38s">بالتناوب (3/8) بدون توقف</option>
+        </select>
+
+        <h5 class="card-title text-center mb-5 text-danger fs-5">معلومات خاصة بالرخصة</h5>
+        <input type="number" class="form-floating mb-3 form-control" id="duree" placeholder="مدة الرخصة (بالأشهر)">
+        <input type="text" class="form-floating mb-3 form-control" id="causes" placeholder="الأسباب">
+        <input type="text" class="form-floating mb-3 form-control" id="aviscp" placeholder="رأي لجنة المشاركة إن وجدت">
+
+        <h5 class="card-title text-center mb-5 text-danger fs-5">العاملات المعنيات بالرخصة</h5>
+        <input type="text" class="form-floating mb-3 form-control" id="emp_name" placeholder="إسم ولقب العاملة">
+        <input type="date" class="form-floating mb-3 form-control" id="emp_naissd" placeholder="تاريخ الميلاد">
+        <input type="text" class="form-floating mb-3 form-control" id="emp_naissp" placeholder="مكان الميلاد">
+        <select class="form-floating mb-3 form-control" id="catpro" placeholder="الصنف المهني"ِِِ>
+            <option value="" selected disabled>الصنف المهني</option>
+            <option value="عمال تنفيذ">عمال تنفيذ</option>
+            <option value="عمال تحكم">عمال تحكم</option>
+            <option value="إطارات">إطارات</option>
+        </select>
+        <input type="text" class="form-floating mb-3 form-control" id="emp_post" placeholder="الوظيفة">
+        <select class="form-floating mb-3 form-control" id="situF">
+            <option value="" selected disabled>الحالة العائلية</option>
+            <option value="عزباء">عزباء</option>
+            <option value="متزوجة">متزوجة</option>
+            <option value="مطلقة">مطلقة</option>
+            <option value="أرملة">أرملة</option>
+        </select>
+
+        <button type="button" class="btn btn-outline-danger" id="ajt_lgn" >إضافة</button>
+
+        <table class="table" id="emp_table">
+            <thead class="table-light">
+                <th>الإسم الكامل</th>
+                <th>تاريخ الميلاد</th>
+                <th>مكان الميلاد</th>
+                <th>الصنف المهني</th>
+                <th>الوظيفة</th>
+                <th>الحالة العائلية</th>
+                <th>حذف</th>
+            </thead>
+            <tbody>
+              
+            </tbody>
+          </table>
+
+          <script>
+            // Function to add a new row to the table
+            $('#ajt_lgn').click(function() {
+                const name = $('#emp_name').val();
+                const datenaiss = $('#emp_naissd').val();
+                const placenaiss = $('#emp_naissp').val();
+                const catpro = $('#catpro').val();
+                const fonct = $('#emp_post').val();
+                const stf = $('#situF').val();
+
+                if (name) {
+                    // Add the new record to the table
+                    const newRow = `
+                        <tr>
+                            <td>${name}</td>
+                            <td>${datenaiss}</td>
+                            <td>${placenaiss}</td>
+                            <td>${catpro}</td>
+                            <td>${fonct}</td>
+                            <td>${stf}</td>
+                            <td>
+                                <button class="btn btn-danger btn-sm delete-btn">حذف</button>
+                            </td>
+                        </tr>
+                    `;
+                    $('#emp_table tbody').append(newRow);
+
+                    // Clear input fields
+                    $('#emp_name').val('');
+                    $('#emp_naissd').val('');
+                    $('#emp_naissp').val('');
+                    $('#catpro').val('');
+                    $('#emp_post').val('');
+                    $('#situf').val('');
+                } else {
+                    alert("يرجى منكم ملء جميع البيانات");
+                }
+            });
+
+            // Function to delete a row from the table
+            $(document).on('click', '.delete-btn', function() {
+                $(this).closest('tr').remove();  // Remove the row when delete button is clicked
+            });
+          </script>
+
+        <div class="alert alert-danger">
+            <strong>ملاحظة</strong> يرجى إرفاق الوقائق التالية:<br>
+            1- بطاقة الشفاء لكل عاملة معنية بالرخصة<br>
+            2- شهادة الميلاد<br>
+            3- شهادة العمل
+        </div>
+        
+
+        <div class="input-group mb-3" dir="rtl">
+            <label class="form-control" for="atchdfile" id="file-label">اختر ملف PDF</label>
+            <input type="file" class="form-control" id="atchdfile" accept=".pdf" style="display:none;" onchange="updateLabel()">
+            <button class="btn btn-outline-danger" type="button" onclick="document.getElementById('atchdfile').click();">تحميل ملف</button>
+        </div>
+        
+        <script>
+            function updateLabel() {
+                var input = document.getElementById('atchdfile');
+                var label = document.getElementById('file-label');
+        
+                if (input.files.length > 0) {
+                    // Update label with the selected file name
+                    label.textContent = input.files[0].name;
+                } else {
+                    // Reset to default if no file is selected
+                    label.textContent = "اختر ملف PDF";
+                }
+            }
+        </script>
+        
+        <div class="d-grid">
+            <button type="button" class="btn btn-outline-danger" id="ajt_lgn" type="submit" >إيداع الطلب</button>
+        </div>
+        <br><br>
+        
+    </form>
+</div>
+{%endblock%}

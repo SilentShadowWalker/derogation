@@ -1,0 +1,24 @@
+{% extends 'home.html'%}
+
+{%block derogation %}
+<div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+  <form action="POST">
+      {% csrf_token %}
+
+      <!--first a title-->
+      <br>
+      <h5 class="card-title text-center mb-5 text-danger fs-5">تسجيل دخول</h5>
+
+      <div class="alert alert-danger">
+        <strong>تنبيه</strong> هذا القسم مخصص لموظفي المفتشية العامة للعمل
+      </div>
+
+      <input type="text" class="form-floating mb-3 form-control" id="entpname" placeholder="إسم المستخدم">
+      <input type="password" class="form-floating mb-3 form-control" id="entpemail" placeholder="كلمة المرور">
+
+      <div class="d-grid">
+        <button class="btn btn-outline-danger" type="submit">نسجيل دخول</button>
+      </div>
+  </form>
+</div>    
+{%endblock %}

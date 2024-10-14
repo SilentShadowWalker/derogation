@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{%block imageheader%}
+<nav class="navbar bg-body-tertiary justify-content-center">
+    <div class="containern">
+      <a class="navbar-brand" href="#">
+        {% load static %}
+        <img src="{% static 'src/inspection.jpg' %}" alt="inspection logo" width="100" height="100">
+      </a>
+    </div>
+</nav>
+{%endblock%}
+
+{%block navbar %}
+<ul class="nav justify-content-center navbar-dark bg-dark" colo>
+  <li class="nav-item">
+    <a class="nav-link active text-danger" aria-current="page"  href="{% url 'Home' %}">طلب رخصة جديدة</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link text-danger" href="{% url 'suivi' %}">متابعة رخصة</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link text-danger" href="{% url 'login' %}">تسجيل دخول</a>
+  </li>
+</ul>
+
+{%endblock %}
